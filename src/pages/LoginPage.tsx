@@ -5,6 +5,8 @@ import { z } from "zod";
 import useAuthStore from "../store/authStore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import React from "react";
+import { EyeIcon, EyeIconSlash } from "../components/IconEyes";
 
 interface SignInFormData {
   loginInput: string;
@@ -15,9 +17,12 @@ const LoginPage = () => {
   const { login } = useAuthStore();
   const naivgate = useNavigate();
   const signInSchema = z.object({
-    loginInput: z.string().min(3, "Username or Email must be at least 3 characters"),
+    loginInput: z
+      .string()
+      .min(3, "Username or Email must be at least 3 characters"),
     password: z.string().min(5, "Password must be at least 5 characters"),
   });
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const {
     register,
@@ -37,7 +42,7 @@ const LoginPage = () => {
       naivgate("/");
     } catch (error: any) {
       if (error.response?.status === 400) {
-        toast.error('Username or password is incorrect');    
+        toast.error("Username or password is incorrect");
       } else {
         console.error("Login failed:", error);
       }
@@ -63,7 +68,9 @@ const LoginPage = () => {
               {...register("loginInput")}
             />
             {errors.loginInput && (
-              <p className="text-red-500 text-sm">{errors.loginInput.message}</p>
+              <p className="text-red-500 text-sm">
+                {errors.loginInput.message}
+              </p>
             )}
           </div>
 
@@ -71,12 +78,21 @@ const LoginPage = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-              placeholder="Password"
-              {...register("password")}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                placeholder="Password"
+                {...register("password")}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeIconSlash /> : <EyeIcon />}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
@@ -91,7 +107,7 @@ const LoginPage = () => {
               <span className="ml-2 text-sm text-gray-600">Remember me</span>
             </label>
             <a
-              href="#"
+              href="/forgot-password"
               className="text-sm text-indigo-600 hover:text-indigo-500"
             >
               Forgot password?

@@ -2,8 +2,15 @@ import { Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
-import ProtectedRoute from "./components/ProtectedRoute";
-import ProtectedRouteHome from "./components/ProtectedRouteHome";
+import {
+  RouteProtected,
+  RouteProtectedCode,
+  RouteProtectedHome,
+  RouteProtectedResetPassword,
+} from "./components/ProtectedRoute";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import VerifyCodePage from "./pages/VerifyCodePage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 const AppRoutes = () => {
   return (
@@ -11,25 +18,42 @@ const AppRoutes = () => {
       <Route
         path="/login"
         element={
-          <ProtectedRouteHome>
+          <RouteProtectedHome>
             <LoginPage />
-          </ProtectedRouteHome>
+          </RouteProtectedHome>
         }
       />
       <Route
         path="/"
         element={
-          <ProtectedRoute>
+          <RouteProtected>
             <HomePage />
-          </ProtectedRoute>
+          </RouteProtected>
         }
       />
       <Route
         path="/register"
         element={
-          <ProtectedRouteHome>
+          <RouteProtectedHome>
             <RegisterPage />
-          </ProtectedRouteHome>
+          </RouteProtectedHome>
+        }
+      />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route
+        path="/verify-code"
+        element={
+          <RouteProtectedCode>
+            <VerifyCodePage />
+          </RouteProtectedCode>
+        }
+      />
+      <Route
+        path="/reset-password"
+        element={
+          <RouteProtectedResetPassword>
+            <ResetPasswordPage />
+          </RouteProtectedResetPassword>
         }
       />
     </Routes>
